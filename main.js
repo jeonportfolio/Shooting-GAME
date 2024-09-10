@@ -14,6 +14,24 @@ let backgroundImage,spaceshipImage,bulletImage,enemyImage,gameOverImage;
 let spaceshipX = canvas.width/2-30
 let spaceshipY = canvas.height-60
 
+let bulletList = [];// 총알 저장 배열
+
+function Bullet() {
+    this.x=0;
+    this.y=0;
+    this.init=function(){
+        this.x = spaceshipX + 8.5;
+        this.y = spaceshipY;
+        
+        bulletList.push(this);
+    };
+
+    this.update = function(){
+        this.y -= 7;
+    }
+}
+
+
 function loadImage() {
     backgroundImage = new Image();
     backgroundImage.src="images/background.png";
@@ -36,17 +54,31 @@ function loadImage() {
 // 키보드의 입출력 값 변경 
 let keysDown = {};
 
+//키를 눌렀을때 
 function setupKeyboardListener (){
     document.addEventListener("keydown", function(event){
         keysDown[event.keyCode] = true;
-        console.log("키다운 객체",keysDown);
+       
     });
-
+//키를 안눌렀을때
     document.addEventListener("keyup", function(event){
-        delete keysDown[event.keyCode]
-        console.log("버튼 클릭후", keysDown);
-    })
+        delete keysDown[event.keyCode];
+       
+        if(event.keyCode == 32) {
+            createBullet();
+        }
+    });
 }
+
+// 총알 생성
+function createBullet() {
+    let b = new Bullet();
+    b.init();
+    console.log("총알리스트", bulletList)
+}
+
+
+
 
 //우주선의 위치 변경 
 
@@ -67,12 +99,22 @@ function update() {
     if(spaceshipX >= canvas.width - 60){
         spaceshipX= canvas.width -60;
     }
+
+    //총알의 y좌표 업데이트 
+
+    for(let i=0;i<bulletList.length;i++){
+        bulletList[i].update();
+    }
 }
 
 
 function render() {
     ctx.drawImage(backgroundImage, 0, 0,canvas.width, canvas.height);
-    ctx.drawImage(spaceshipImage,spaceshipX,spaceshipY)
+    ctx.drawImage(spaceshipImage,spaceshipX,spaceshipY);
+    
+    for(let i=0; i< bulletList.length;i++){
+        ctx.drawImage(bulletImage, bulletList[i].x, bulletList[i].y);
+    }
 }
 
 function main() {
@@ -84,3 +126,4 @@ function main() {
 loadImage();
 setupKeyboardListener();
 main();
+
