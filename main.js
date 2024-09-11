@@ -9,6 +9,9 @@ canvas.height=700;
 document.body.appendChild(canvas);
 
 let backgroundImage,spaceshipImage,bulletImage,enemyImage,gameOverImage;
+let gameOver=false; //true이면 게임이 끝남 
+let score=0;
+
 
 //우주선 좌표
 let spaceshipX = canvas.width/2-30
@@ -16,9 +19,11 @@ let spaceshipY = canvas.height-60
 
 let bulletList = [];// 총알 저장 배열
 
+
 function Bullet() {
     this.x=0;
     this.y=0;
+    this.alive=true; //ture면 총알이 보임 
     this.init=function(){
         this.x = spaceshipX + 8.5;
         this.y = spaceshipY;
@@ -28,9 +33,44 @@ function Bullet() {
 
     this.update = function(){
         this.y -= 7;
+    };
+
+    this.checkHit = function(){
+        
+        for(let i=0; i < enemyList.length;i++){
+                if(this.y <= enemyList[i].y && this.x>=enemyList[i].x && this.x<=enemyList[i].x+64);
+                 score++;
+                 this.alive=false;   
+                 enemyList.splice(i,1);
+        }
     }
 }
 
+function generateRamdomValue(min,max){
+    let randomNum = Math.floor(Math.random()*(max-min+1))+min
+    return randomNum;
+
+}
+
+let enemyList = [];
+
+function Enemy (){
+    this.x = 0;
+    this.y = 0;
+    this.init = function(){
+        this.y = 0
+        this.x = generateRamdomValue(0,canvas.width-64) //캔버스 넓이에서 우주선 가로길이 뺀다.
+        enemyList.push(this)
+    };
+    this.update=function(){
+        this.y += 5
+
+        if(this.y >= canvas.height - 64){
+            gameOver = true;
+            console.log("게임오바")
+        } 
+    }
+}
 
 function loadImage() {
     backgroundImage = new Image();
@@ -77,6 +117,14 @@ function createBullet() {
     console.log("총알리스트", bulletList)
 }
 
+// 적군 생성
+function createEnemy() {
+    const interval = setInterval(function(){
+        let e = new Enemy();
+        e.init();
+    },1000)
+}
+
 
 
 
@@ -103,7 +151,16 @@ function update() {
     //총알의 y좌표 업데이트 
 
     for(let i=0;i<bulletList.length;i++){
-        bulletList[i].update();
+        
+      if(bulletList[i].alive){
+            bulletList[i].update();
+            bulletList[i].checkHit();
+      }  
+        
+    }
+
+    for(let i=0; i<enemyList.length; i++){
+        enemyList[i].update();
     }
 }
 
@@ -113,17 +170,29 @@ function render() {
     ctx.drawImage(spaceshipImage,spaceshipX,spaceshipY);
     
     for(let i=0; i< bulletList.length;i++){
-        ctx.drawImage(bulletImage, bulletList[i].x, bulletList[i].y);
+        if(bulletList[i].alive){
+            ctx.drawImage(bulletImage, bulletList[i].x, bulletList[i].y);
+        }
+        
+    }
+
+    for(let i=0; i< enemyList.length;i++){
+        ctx.drawImage(enemyImage, enemyList[i].x, enemyList[i].y);
     }
 }
 
 function main() {
-    update();
-    render();
-    requestAnimationFrame(main);
+    if(!gameOver){
+        update();
+        render();
+        requestAnimationFrame(main);
+    }else{
+        ctx.drawImage(gameOverImage,10,100, 380, 380);
+    }
 }
 
 loadImage();
 setupKeyboardListener();
+createEnemy();
 main();
 
