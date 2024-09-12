@@ -14,8 +14,8 @@ let score=0;
 
 
 //우주선 좌표
-let spaceshipX = canvas.width/2-30
-let spaceshipY = canvas.height-60
+let spaceshipX = canvas.width/2-30;
+let spaceshipY = canvas.height-60;
 
 let bulletList = [];// 총알 저장 배열
 
@@ -37,17 +37,18 @@ function Bullet() {
 
     this.checkHit = function(){
         
-        for(let i=0; i < enemyList.length;i++){
-                if(this.y <= enemyList[i].y && this.x>=enemyList[i].x && this.x<=enemyList[i].x+64);
-                 score++;
-                 this.alive=false;   
-                 enemyList.splice(i,1);
+        for(let i = 0; i < enemyList.length; i++){
+            if (this.y <= enemyList[i].y && this.x >= enemyList[i].x && this.x <= enemyList[i].x + 64) {
+                score++;
+                this.alive = false;
+                enemyList.splice(i, 1);
+            }
         }
-    }
+    };
 }
 
 function generateRamdomValue(min,max){
-    let randomNum = Math.floor(Math.random()*(max-min+1))+min
+    let randomNum = Math.floor(Math.random()*(max-min+1))+min;
     return randomNum;
 
 }
@@ -56,16 +57,16 @@ let enemyList = [];
 
 function Enemy (){
     this.x = 0;
-    this.y = 0;
+    this.y = 20;
     this.init = function(){
-        this.y = 0
-        this.x = generateRamdomValue(0,canvas.width-64) //캔버스 넓이에서 우주선 가로길이 뺀다.
+        this.y = 20
+        this.x = generateRamdomValue(0,canvas.width-62) //캔버스 넓이에서 우주선 가로길이 뺀다.
         enemyList.push(this)
     };
     this.update=function(){
         this.y += 5
 
-        if(this.y >= canvas.height - 64){
+        if(this.y >= canvas.height - 62){
             gameOver = true;
             console.log("게임오바")
         } 
@@ -122,7 +123,7 @@ function createEnemy() {
     const interval = setInterval(function(){
         let e = new Enemy();
         e.init();
-    },1000)
+    },600)
 }
 
 
@@ -151,14 +152,15 @@ function update() {
     //총알의 y좌표 업데이트 
 
     for(let i=0;i<bulletList.length;i++){
-        
-      if(bulletList[i].alive){
+         if(bulletList[i].alive){
             bulletList[i].update();
             bulletList[i].checkHit();
-      }  
-        
-    }
+         }   
+            
+    }   
+      
 
+    //적군 위치 변경 
     for(let i=0; i<enemyList.length; i++){
         enemyList[i].update();
     }
@@ -168,7 +170,11 @@ function update() {
 function render() {
     ctx.drawImage(backgroundImage, 0, 0,canvas.width, canvas.height);
     ctx.drawImage(spaceshipImage,spaceshipX,spaceshipY);
+    ctx.fillText(`score:${score}`,20,20);
+    ctx.fillStyle = "white";
+    ctx.font = "25px Arial";
     
+    //살아있는 총알만 보여주기
     for(let i=0; i< bulletList.length;i++){
         if(bulletList[i].alive){
             ctx.drawImage(bulletImage, bulletList[i].x, bulletList[i].y);
