@@ -191,7 +191,7 @@ function main() {
     if(!gameOver){
         update();
         render();
-        requestAnimationFrame(main);
+        requestAnimationFrame(main);//backgrounImage계속호출
     }else{
         ctx.drawImage(gameOverImage,10,100, 380, 380);
     }
