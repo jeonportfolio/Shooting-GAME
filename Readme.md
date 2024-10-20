@@ -3,7 +3,7 @@
     자바스크립스틀 활용한 슈팅게임입니다.
 ```
 
-<a herf="">슈팅게임 바로가기(클릭)</a><br/>
+<a herf="https://defendingearth.netlify.app/">슈팅게임 바로가기(클릭)</a><br/>
 <img src="./images/space.png" alt="이미지 설명" width="400"/>
  
 ## ★캔버스 세팅
