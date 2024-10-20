@@ -47,6 +47,8 @@ function Bullet() {
     };
 }
 
+
+//랜덤한 수 추출하기 
 function generateRamdomValue(min,max){
     let randomNum = Math.floor(Math.random()*(max-min+1))+min;
     return randomNum;
@@ -60,7 +62,7 @@ function Enemy (){
     this.y = 20;
     this.init = function(){
         this.y = 20
-        this.x = generateRamdomValue(0,canvas.width-62) //캔버스 넓이에서 우주선 가로길이 뺀다.
+        this.x = generateRamdomValue(0,canvas.width-62) //캔버스 넓이에서 우주선 가로길이 뺀다.(최소값,최댓값)
         enemyList.push(this)
     };
     this.update=function(){

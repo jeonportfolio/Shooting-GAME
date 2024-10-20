@@ -42,17 +42,22 @@
 ---
 
 ◎ 바닥에 닿으면 게임이 끝남 <br/>
-◎ 적군의 위치는 랜덤한 위치에서 1초마다 생성 generateRamdomValue(Math.random) & setInterval사용<br/>
-◎ y의 값을 계속적으로 업데이트<br/>
+◎ 적군의 위치는 랜덤한 위치에서 1초마다 생성 generateRamdomValue(Math.random) & setInterval사용(max와 min으로 제어)<br/>
+◎ y의 값을 계속적으로 업데이트 적군은 List에 저장<br/>
 
 ## ★적군 사격
 ---
 
 ◎ 총알이 적군의 바닥 즉 적군의 y보다 작고 적군의 x좌표의 안쪽에 위치하면 명중 <br/>
 ◎ 명중시 점수가 오르고 총알과 적군이 사라짐 (splice) & render에서 총알은 alive의 여부에 따라 구분<br/>
+◎ checkHit 함수로 총알의 적중 여부를 판단하고 적중하면 score가 1점씩 올라감 alive로 총알 삭제 선택 <br/>
+◎ splice로 적중한 적은 잘라낸다.<br/>
+
 
 
 ## ★게임 오버
 ---
 
-◎ 적군이 y축 (canvas.heigth - 64)의 높이에 도달하면 게임오바<br/>
+◎ 적군이 y축 (canvas.heigth - 64(적군의 높이))의 높이에 도달하면 게임오바<br/>
+◎ gameover의 값이 true로 바뀌면 끝<br/>
+◎ main함수를 꺼버리면 게임 중단<br/> 
